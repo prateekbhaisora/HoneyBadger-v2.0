@@ -1,119 +1,43 @@
-HoneyBadger
+HoneyBadger-v2.0
 ===========
 
 <img src="https://github.com/christoftorres/HoneyBadger/blob/master/honeybadger_logo.png" width="200">
 
-An analysis tool to detect honeypots in Ethereum smart contracts :honey_pot:. HoneyBadger is based on [Oyente](https://github.com/melonproject/oyente). Our paper can be found [here](https://arxiv.org/pdf/1902.06976.pdf).
+This is the improved version of the Honeybadger - an analysis tool to detect honeypots :honey_pot: in Ethereum smart contracts. HoneyBadger tool was based on [Oyente](https://github.com/melonproject/oyente) and its original paper can be found [here](https://arxiv.org/pdf/1902.06976.pdf).
 
-## Quick Start
+## How to setup the tool?
 
-A container with the dependencies set up can be found [here](https://hub.docker.com/r/christoftorres/honeybadger/).
-
-To open the container, install docker and run:
-
-```
-docker pull christoftorres/honeybadger && docker run -i -t christoftorres/honeybadger
-```
-
-To evaluate a simple honeypot inside the container, run:
-
-```
-python honeybadger/honeybadger.py -s honeypots/MultiplicatorX3.sol
-```
-
-and you are done!
-
-## Custom Docker image build
-
-```
-docker build -t honeybadger .
-docker run -it honeybadger:latest
-```
-
-## Full installation
-
-### Install the following dependencies
-#### solc
-```
-$ sudo add-apt-repository ppa:ethereum/ethereum
-$ sudo apt-get update
-$ sudo apt-get install solc
-```
-
-#### evm from [go-ethereum](https://github.com/ethereum/go-ethereum)
-
-1. https://geth.ethereum.org/downloads/ or
-2. By from PPA if your using Ubuntu
-```
-$ sudo apt-get install software-properties-common
-$ sudo add-apt-repository -y ppa:ethereum/ethereum
-$ sudo apt-get update
-$ sudo apt-get install ethereum
-```
-
-#### [z3](https://github.com/Z3Prover/z3/releases) Theorem Prover version 4.7.1.
-
-Download the [source code of version z3-4.7.1](https://github.com/Z3Prover/z3/releases/tag/z3-4.7.1)
-
-Install z3 using Python bindings
-
-```
-$ python scripts/mk_make.py --python
-$ cd build
-$ make
-$ sudo make install
-```
-
-#### [Requests](https://github.com/kennethreitz/requests/) library
-
-```
-pip install requests
-```
-
-#### [web3](https://github.com/pipermerriam/web3.py) library
-
-```
-pip install web3
-```
-
-### Evaluate Ethereum smart contract honeypot
-
-```
-python honeybadger.py -s <contract filename>
-```
-
-Run ```python honeybadger.py --help``` for a complete list of options.
-
-### An alternate manual way of installation
+The following dependencies must be installed before one can start to use HoneyBadger-v2.0:
 
 #### Solidity Compiler (solc)
 
-1. Download the solc executable binary from [here](https://github.com/ethereum/solidity/releases). e.g. Download ``solc-static-linux`` for ``Ubuntu 22.04 LTS`` or above. 
-
-2. Move the executable solc binary to a directory in your system's PATH environment variable *(This allows you to run solc from any directory in your terminal)* as:
+1. Ensure that you have Snap store installed. If not, install as:
 
 ```sh
-cd ~/Downloads/
-sudo mv solc-static-linux /usr/local/bin/
-sudo chmod +x /usr/local/bin/solc-static-linux
+sudo apt update
+sudo apt install snapd
 ```
 
-3. *(Optional Step)* Rename the binary to solc and verify installation as:
+2. Install solc 0.5.16 from snap store and verify installation as:
 
 ```sh
-cd /usr/local/bin/
-sudo mv solc-static-linux solc
+sudo snap install solc
 solc --version
 ```
 
 #### Ethereum Virtual Machine (EVM) using geth-tools
 
 
-1. Download the appropriate get binary for your system from [here](https://github.com/ethereum/go-ethereum/releases/tag/v1.8.6).
+1. Download the appropriate geth-tools binary for your system from [here](https://geth.ethereum.org/downloads) and extract its contents.
 
-2. Ensure that you have GoLang installed.
+2. Move all the geth-tools binaries to your system path and verify installation as:
 
-3. Build evm v1.8.6 from source using ``make all`` command.
+```sh
+cd ~/Downloads/geth-alltools-linux-amd64-1.13.14-2bd6bd01/
+mv abigen bootnode clef evm geth rlpdump /usr/local/bin/
+geth --version
+evm -version
+```
 
 #### [z3](https://github.com/Z3Prover/z3/releases) Theorem Prover version 4.7.1
 
@@ -128,13 +52,15 @@ sudo ln -s /usr/bin/python2.7 /usr/bin/python
 python --version
 ```
 
-3. Install z3 using Python binding as:
+3. Install z3 using Python binding and verify installation as:
 
 ```sh
 cd ~/Downloads/z3-z3-4.7.1
 python scripts/mk_make.py --python
 cd build
 make
+sudo make install
+z3 --version
 ```
 
 4. Move it to your system libraries as:
@@ -163,13 +89,21 @@ pip2 install requests
 pip2 install sha3
 ```
 
-### Evaluate Ethereum smart contract honeypots
+## How to use the tool?
+
+Clone the project from our Github repo and verify if it is working as:
 
 ```sh
 cd ~/Desktop/
 git clone git@github.com:prateekbhaisora/HoneyBadger-v2.0.git
 cd ~/Desktop/HoneyBadger-v2.0/
-python honeybadger/honeybadger.py -s <path to contract filename>
+python honeybadger.py --help
 ```
 
-Run ```python honeybadger.py --help``` for a complete list of options.
+### Evaluate Ethereum smart contract honeypots
+
+Download smart contracts or, use inbuilt datasets to analysis smart contracts as:
+
+```sh
+python honeybadger/honeybadger.py -s <path to contract filename>
+```
