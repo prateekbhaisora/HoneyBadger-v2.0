@@ -28,7 +28,7 @@ solc --version
 #### Ethereum Virtual Machine (EVM) using geth-tools
 
 
-1. Download the appropriate geth-tools binary for your system from [here](https://geth.ethereum.org/downloads) and extract its contents.
+1. Download the appropriate geth-tools tar file for your system from [here](https://geth.ethereum.org/downloads) and extract its contents.
 
 2. Move all the geth-tools binaries to your system path and verify installation as:
 
@@ -75,7 +75,7 @@ sudo mv ~/Downloads/z3-z3-4.7.1/ /usr/local/lib
 
 #### Python libraries
 
-1. Ensure that you have python2 venv installed on your system. If not, install as:
+1. Ensure that you have python2 and pip2 installed on your system. If not, install as:
 
 ```sh
 sudo apt install python-pip
@@ -107,3 +107,5 @@ Download smart contracts or, use inbuilt datasets to analysis smart contracts as
 ```sh
 python honeybadger/honeybadger.py -s <path to contract filename>
 ```
+
+> **<span style="color:red">**Note:**</span>** Ubuntu 22.04.4 LTS or above is preferred for using HoneyBadger-v2.0E
