@@ -108,4 +108,4 @@ Download smart contracts or, use inbuilt datasets to analysis smart contracts as
 python honeybadger/honeybadger.py -s <path to contract filename>
 ```
 
-> **<span style="color:red">**Note:**</span>** Ubuntu 22.04.4 LTS or above is preferred for using HoneyBadger-v2.0E
+> **<span style="color:red">**<u>Note:</u>**</span>** Ubuntu 22.04.4 LTS or above is preferred for using HoneyBadger-v2.0
