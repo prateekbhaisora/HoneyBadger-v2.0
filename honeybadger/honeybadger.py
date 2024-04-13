@@ -17,7 +17,8 @@ from utils import run_command
 from HTMLParser import HTMLParser
 
 
-# TODO Add checks for solc 0.4.25 and z3 4.7.1
+# Original code wanted checks for solc 0.4.25 and z3 4.7.1
+# I will add checks for solc 0.5.16 and z3 4.7.1
 
 def cmd_exists(cmd):
     return subprocess.call(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
@@ -53,7 +54,7 @@ def has_dependencies_installed():
 def evm_cmp_version():
     # max_version and min_version need to have the same number of dot separated numbers.
     # The parts of the version need to be convertible to integers.
-    max_version_str = "1.8.16"
+    max_version_str = "1.13.14"
     min_version_str = "0.0.0"
     max_version = [int(x) for x in max_version_str.split(".")]
     min_version = [int(x) for x in min_version_str.split(".")]
@@ -86,6 +87,7 @@ def extract_bin_str(s):
     binary_regex = r"\r?\n======= (.*?) =======\r?\nBinary of the runtime part: \r?\n(.*?)\r?\n"
     contracts = re.findall(binary_regex, s)
     contracts = [contract for contract in contracts if contract[1]]
+    print("contracts are: ", contracts)
     if not contracts:
         logging.critical("Solidity compilation failed")
         print "======= error ======="
@@ -149,26 +151,26 @@ def main():
     global args
 
     print("")
-    print("                       ___,,___                                   ")
-    print("                 _,-='=- =-  -`''--.__,,.._                       ")
-    print("              ,-;// /  - -       -   -= - '=.                     ")
-    print("            ,'///    -     -   -   =  - ==-=\`.                   ")
-    print("           |/// /  =    `. - =   == - =.=_,,._ `=/|               ")
-    print("          ///    -   -    \  - - = ,ndDMHHMM/\b  \\               ")
-    print("        ,' - / /        / /\ =  - /MM(,,._`YQMML  `|              ")
-    print("       <_,=^Kkm / / / / ///H|wnWWdMKKK#''-;. `'0\  |              ")
-    print("              `''QkmmmmmnWMMM\''WHMKKMM\   `--.  \> \             ")
-    print("                    `'''  `->>>    ``WHMb,.    `-_<@)             ")
-    print("                                      `'QMM`.                     ")
-    print("                                         `>>>                     ")
-    print("  _    _                        ____            _                 ")
-    print(" | |  | |                      |  _ \          | |                ")
-    print(" | |__| | ___  _ __   ___ _   _| |_) | __ _  __| | __ _  ___ _ __ ")
-    print(" |  __  |/ _ \| '_ \ / _ \ | | |  _ < / _` |/ _` |/ _` |/ _ \ '__|")
-    print(" | |  | | (_) | | | |  __/ |_| | |_) | (_| | (_| | (_| |  __/ |   ")
-    print(" |_|  |_|\___/|_| |_|\___|\__, |____/ \__,_|\__,_|\__, |\___|_|   ")
-    print("                           __/ |                   __/ |          ")
-    print("                          |___/                   |___/           ")
+    print("                                    ___,,___                                                        ")
+    print("                              _,-='=- =-  -`''--.__,,.._                                            ")
+    print("                           ,-;// /  - -       -   -= - '=.                                          ")
+    print("                         ,'///    -     -   -   =  - ==-=\`.                                        ")
+    print("                        |/// /  =    `. - =   == - =.=_,,._ `=/|                                    ")
+    print("                       ///    -   -    \  - - = ,ndDMHHMM/\b  \\                                    ")
+    print("                     ,' - / /        / /\ =  - /MM(,,._`YQMML  `|                                   ")
+    print("                    <_,=^Kkm / / / / ///H|wnWWdMKKK#''-;. `'0\  |                                   ")
+    print("                           `''QkmmmmmnWMMM\''WHMKKMM\   `--.  \> \                                  ")
+    print("                                 `'''  `->>>    ``WHMb,.    `-_<@)                                  ")
+    print("                                                   `'QMM`.                                          ")
+    print("                                                      `>>>                                          ")
+    print("  _    _                        ____            _                               ____         ____   ")
+    print(" | |  | |                      |  _ \          | |                             |__  \       /    \  ")
+    print(" | |__| | ___  _ __   ___ _   _| |_) | __ _  __| | __ _  ___ _ __      __    __   |  |     |  /\  | ")
+    print(" |  __  |/ _ \| '_ \ / _ \ | | |  _ < / _` |/ _` |/ _` |/ _ \ '__| ___ \ \  / /   |  |     | |  | | ")
+    print(" | |  | | (_) | | | |  __/ |_| | |_) | (_| | (_| | (_| |  __/ |   |___| \ \/ /  _/  /_   _ |  \/  | ")
+    print(" |_|  |_|\___/|_| |_|\___|\__, |____/ \__,_|\__,_|\__, |\___|_|          \__/  |______| (_) \____/  ")
+    print("                           __/ |                   __/ |                                            ")
+    print("                          |___/                   |___/                                             ")
     print("")
 
     parser = argparse.ArgumentParser()
