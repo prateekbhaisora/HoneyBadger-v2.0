@@ -142,11 +142,7 @@ def initGlobalVars():
 
     global heuristics
     heuristics = []
-
-
-
-
-
+    
     # capturing the last statement of each basic block
     global end_ins_dict
     end_ins_dict = {}

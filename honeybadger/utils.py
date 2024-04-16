@@ -324,9 +324,13 @@ def get_distinct_contracts(list_of_contracts = "concurr.csv"):
                             flag[j] = i
     print flag
 
+# This function runs a command in the shell, captures its standard output, and returns it as a byte string.
 def run_command(cmd):
-    FNULL = open(os.devnull, 'w')
+    FNULL = open(os.devnull, 'w')       # Suppress console output from command being executed
     solc_p = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=FNULL)
+    # The communicate() method of the Popen object waits for the subprocess to finish and returns a tuple (stdout_data, stderr_data) 
+    # containing the captured standard output and standard error of the subprocess, respectively. 
+    # Since we're only interested in the standard output, [0] is used to extract it.
     return solc_p.communicate()[0]
 
 def remove_line_break_space(expression):

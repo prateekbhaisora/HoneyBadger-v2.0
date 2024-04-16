@@ -5,15 +5,21 @@ import json
 class AstHelper:
     def __init__(self, filename):
         self.source_list = self.get_source_list(filename)
+        # print("Source List (out["sources"]) is as: .............................")
         self.contracts = self.extract_contract_definitions(self.source_list)
 
     def get_source_list(self, filename):
+        # Tells solc to output the compiler output in the form of a JSON object with the abstract syntax tree (ast) field included.
         cmd = "solc --combined-json ast %s" % filename
         out = run_command(cmd)
         out = json.loads(out)
+        # return out
         return out["sources"]
 
     def extract_contract_definitions(self, sourcesList):
+        # This initializes a dictionary ret with three empty dictionaries as values. 
+        # These dictionaries will store information about contracts by their IDs, names, and sources.
+        # print("", sourcesList)
         ret = {
             "contractsById": {},
             "contractsByName": {},
@@ -22,6 +28,7 @@ class AstHelper:
         walker = AstWalker()
         for k in sourcesList:
             nodes = []
+            # walker.walk(sourcesList["sources"][k]["AST"], "ContractDefinition", nodes)
             walker.walk(sourcesList[k]["AST"], "ContractDefinition", nodes)
             for node in nodes:
                 ret["contractsById"][node["id"]] = node
