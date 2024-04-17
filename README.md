@@ -88,6 +88,7 @@ sudo apt install python2-dev
 pip2 install requests
 pip2 install sha3
 pip2 install web3==0.1.9
+pip2 install beautifulsoup4
 sudo apt install graphviz
 ```
 
