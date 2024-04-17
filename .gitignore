@@ -145,5 +145,8 @@ tools/analyser/analysis.py
 website
 
 datasets/
+results/
 new-dataset/
-old-dataset/
+new-results/
+outputs/
+our_additions.txt

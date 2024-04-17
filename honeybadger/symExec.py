@@ -234,7 +234,9 @@ def build_cfg_and_analyze():
             print_cfg()
 
 def print_cfg():
-    f = open(c_name.replace('.disasm', '').replace(':', '-')+'.dot', 'w')
+    dot_file_path = c_name.replace('datasets/honeypots/', 'outputs/').replace('.evm', '').replace('.disasm', '').replace(':', '-') + '.dot'
+    png_file_path = c_name.replace('datasets/honeypots/', 'outputs/').replace('.evm', '').replace('.disasm', '').replace(':', '-') + '.png'
+    f = open(dot_file_path, 'w')
     f.write('digraph honeybadger_cfg {\n')
     f.write('rankdir = TB;\n')
     f.write('size = "240"\n')
@@ -274,6 +276,7 @@ def print_cfg():
                 f.write('"'+hex(block.get_start_address())+'" -> "UNKNOWN_TARGET" [color="black"];\n')
     f.write('}\n')
     f.close()
+    subprocess.call(['dot', '-Tpng', '-o', png_file_path, dot_file_path])
     log.debug(str(edges))
 
 def mapping_push_instruction(current_line_content, current_ins_address, idx, positions, length):
