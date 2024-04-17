@@ -18,7 +18,6 @@ from utils import run_command       # custom module containing utility functions
 from HTMLParser import HTMLParser   # Provides a parser for HTML documents, allowing for parsing and extracting data from HTML strings or files.
 
 
-# Original code wanted checks for solc 0.4.25 and z3 4.7.1
 # Original Code used solc 0.4.25, evm 1.8.16 and z3 4.7.1 and go 1.9.2 (for building from source)
 
 #  The function returns True if the command exists and is executable, and False otherwise.
@@ -40,13 +39,9 @@ def has_dependencies_installed():
     except:
         logging.critical("Z3 is not available. Please install z3 from https://github.com/Z3Prover/z3.")
         return False
-
-    '''
-    # TODO
-    Add Z3 version check here.
-    
     if not z3_cmp_version():
-    '''
+        logging.critical("Z3 version is incompatible.")
+        return False
 
     if not cmd_exists("evm"):
         logging.critical("Please install evm from go-ethereum and make sure it is in the path.")
@@ -55,16 +50,42 @@ def has_dependencies_installed():
         logging.critical("evm version is incompatible.")
         return False
 
-    '''
-    # TODO
-    Add solc version check here.
-
-    if not solc_cmp_version():
-    '''
-
     if not cmd_exists("solc --version"):
         logging.critical("solc is missing. Please install the solidity compiler and make sure solc is in the path.")
         return False
+    if not solc_cmp_version():
+        logging.critical("solc version is incompatible.")
+        return False
+
+    return True
+
+import logging
+
+def z3_cmp_version():
+    # max_version and min_version need to have the same number of dot separated numbers.
+    # The parts of the version need to be convertible to integers.
+    max_version_str = "4.8.1"
+    min_version_str = "4.7.1"
+    max_version = [int(x) for x in max_version_str.split(".")]
+    min_version = [int(x) for x in min_version_str.split(".")]
+
+    success, output = cmd_stdout("z3 --version")  # Modified command to check Z3 version
+    if not success or not output:
+        logging.critical("Error while determining the version of Z3.")
+
+    version_str = output.split()[2].split("-")[0]
+    version = [int(x) for x in version_str.split(".")]
+
+    if len(version) != len(max_version):
+        logging.critical("Cannot compare versions: {} (max) and {} (installed).".format(max_version_str, version_str))
+
+    for i in range(0, len(max_version)):
+        if max_version[i] < version[i]:
+            logging.critical("The installed Z3 version ({}) is too new. Honeybadger supports at most version {}.".format(version_str, max_version_str))
+            return False
+        if min_version[i] > version[i]:
+            logging.critical("The installed Z3 version ({}) is too old. Honeybadger requires at least version {}.".format(version_str, min_version_str))
+            return False
 
     return True
 
@@ -92,6 +113,36 @@ def evm_cmp_version():
             return False
         if min_version[i] > version[i]:
             logging.critical("The installed evm version ({}) is too old. Honeybadger requires at least version {}.".format(version_str, min_version_str))
+            return False
+
+    return True
+
+import logging
+
+def solc_cmp_version():
+    # max_version and min_version need to have the same number of dot separated numbers.
+    # The parts of the version need to be convertible to integers.
+    max_version_str = "0.4.30"
+    min_version_str = "0.4.25"
+    max_version = [int(x) for x in max_version_str.split(".")]
+    min_version = [int(x) for x in min_version_str.split(".")]
+
+    success, output = cmd_stdout("solc --version")
+    if not success or not output:
+        logging.critical("Error while determining the version of the solc compiler.")
+
+    version_str = output.split()[-1].split("+")[0]
+    version = [int(x) for x in version_str.split(".")]
+
+    if len(version) != len(max_version):
+        logging.critical("Cannot compare versions: {} (max) and {} (installed).".format(max_version_str, version_str))
+
+    for i in range(0, len(max_version)):
+        if max_version[i] < version[i]:
+            logging.critical("The installed solc version ({}) is too new. Honeybadger supports at most version {}.".format(version_str, max_version_str))
+            return False
+        if min_version[i] > version[i]:
+            logging.critical("The installed solc version ({}) is too old. Honeybadger requires at least version {}.".format(version_str, min_version_str))
             return False
 
     return True
