@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import shlex            # Used to split command-line strings into tokens, respecting quoted strings and other shell syntax.
-import subprocess       # Allows for the creation and management of subprocesses, enabling interaction with system processes.
+import subprocess       # Allows for the creation and management of subprocesses, enabling interaction with system processes, and executing shell commands.
 import os               # Provides functions for interacting with the operating system, such as accessing files and directories.
 import re               # Provides support for regular expressions, allowing for pattern matching and string manipulation.
 import argparse         # Used for parsing command-line arguments, providing a structured and user-friendly interface for defining and handling script arguments.
@@ -330,6 +330,10 @@ def main():
             # Writing Binary code after removing Swarm Hash into processed_evm_file
             with open(processed_evm_file, 'w') as of:
                 of.write(removeSwarmHash(bin_str))
+
+            # Added shell command to create a fresh output directory on every run
+            subprocess.call(['rm', '-rf', 'outputs'])
+            subprocess.call(['mkdir', 'outputs'])
 
             # Analyze function will perform the main logic of symbolic execution on the contract
             # i.e., on processed evm bytecode file, disassembled version of the EVM bytecode file and 

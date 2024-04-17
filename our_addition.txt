@@ -1,0 +1,5 @@
+1- Added a functionality to visualize CFG thus formed, by saving it as a PNG, using a -c flag.
+2- Added a functionality to fetch contract codes using address of contract.
+3- Tested HoneyBadger on 47,437 newer Ethereum Smart Contracts from October 2018 to March 2022.
+4- Improved code coverage of 
+ 

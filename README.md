@@ -87,6 +87,8 @@ sudo apt install python2-dev
 ```sh
 pip2 install requests
 pip2 install sha3
+pip2 install web3==0.1.9
+sudo apt install graphviz
 ```
 
 ## How to use the tool?
