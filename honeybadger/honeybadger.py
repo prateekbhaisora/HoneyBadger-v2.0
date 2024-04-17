@@ -11,6 +11,7 @@ import symExec          # custom module for symbolic execution, used for analyzi
 import global_params    # custom module for managing global parameters or configurations within the program.
 import z3               # Provides access to the Z3 theorem prover, allowing for formal verification and constraint solving.
 import z3.z3util        # Additional utilities for working with Z3, such as simplification and printing of Z3 expressions.
+from bs4 import BeautifulSoup # For fetching source code from address.
 
 from source_map import SourceMap    # custom module for managing source code mappings or relationships between different representations of code.
 from utils import run_command       # custom module containing utility functions used throughout the program.
@@ -196,7 +197,7 @@ def main():
     group.add_argument("-ru", "--remoteURL", type=str,
                        help="Get contract from remote URL. Solidity by default. Use -b to process evm instead.", dest="remote_URL")
     group.add_argument("-a", "--address", type=str, 
-                       help="Fetches smart contract source code from its address.") # TODO: Add logic to fetch code from address
+                       help="Fetches smart contract source code from its address.") 
 
     # Current HoneyBadger Version
     parser.add_argument("--version", action="version", version="HoneyBadger version 2.0")
@@ -289,6 +290,27 @@ def main():
         args.source = filename
         with open(filename, 'w') as f:
             f.write(code)
+
+    if args.address:
+        url = "https://etherscan.io/address/{}/#code".format(args.address)
+        headers = { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            code_element = soup.find('pre', class_='js-sourcecopyarea')
+            if code_element:
+                source_code = code_element.text.strip()         # Source code is fetched in Unicode
+                source_code = source_code.encode('utf-8')       # Source code is encoded in UTF-8 to convert it to a string
+                subprocess.call(['rm', '-rf', 'inputs'])
+                subprocess.call(['mkdir', 'inputs'])
+                path_with_filename = "inputs/fetched_source_code.sol"
+                with open(path_with_filename, 'w') as f:
+                    f.write(source_code)
+                args.source = path_with_filename
+            else:
+                print("Contract source code not found.")
+        else:
+            print("Failed to fetch contract source code. Status code: {}".format(response.status_code))
 
     # If we are given bytecode, disassemble first, as we need to operate on EVM ASM.
     if args.bytecode:
