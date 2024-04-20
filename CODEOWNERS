@@ -5,7 +5,7 @@
 #
 # To assign ownership for specific files or directories:
 #   Pattern  User
-#   /path/to/file  username
+#   /path/to/file  @username
 #   /path/to/directory  @team-name
 
-* prateekbhaisora
+* @prateekbhaisora
