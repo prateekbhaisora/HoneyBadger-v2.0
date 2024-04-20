@@ -1,0 +1,11 @@
+# CODEOWNERS file syntax:
+#
+# Pattern:   The file pattern to which the rules apply.
+# User:      GitHub username or team name.
+#
+# To assign ownership for specific files or directories:
+#   Pattern  User
+#   /path/to/file  username
+#   /path/to/directory  @team-name
+
+* prateekbhaisora
